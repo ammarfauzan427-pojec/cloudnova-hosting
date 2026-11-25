@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout &amp; Keranjang Belanja — CloudNova Hosting</title>
+    <meta name="description" content="Selesaikan pemesanan paket hosting CloudNova Anda dengan mudah, cepat, dan transparan.">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+
+    <style>
+        .checkout-page {
+            padding-top: 100px;
+            padding-bottom: 80px;
+            background: var(--bg-main);
+            min-height: 100vh;
+        }
+
+        .checkout-header-bar {
+            background: linear-gradient(90deg, #3478F6, #8057FF);
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 15px;
+            text-align: center;
+        }
+
+        .cart-card {
+            background: linear-gradient(145deg, #131F36, #101A2E);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .cart-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .cart-item-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cart-item-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(52, 120, 246, 0.15);
+            color: #5794FF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .cart-item-title h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        .cart-item-title span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .duration-selector-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 18px;
+        }
+
+        .duration-select-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .duration-select {
+            background: #0D1627;
+            color: #ffffff;
+            border: 1px solid rgba(87, 148, 255, 0.3);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .duration-select option {
+            background: #0D1627;
+            color: #ffffff;
+        }
+
+        .cart-price-tag {
+            text-align: right;
+        }
+
+        .cart-price-rate {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1;
+        }
+
+        .cart-price-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .discount-pill {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.15);
+            color: #F87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 50px;
+            margin-right: 8px;
+        }
+
+        .promo-banner-strip {
+            background: linear-gradient(90deg, rgba(52, 120, 246, 0.2), rgba(128, 87, 255, 0.2));
+            border: 1px solid rgba(87, 148, 255, 0.3);
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #E2E8F0;
+            margin-bottom: 18px;
+        }
+
+        .promo-banner-strip i {
+            color: #5794FF;
+            font-size: 16px;
+        }
+
+        .perks-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .perks-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #CBD5E1;
+        }
+
+        .perks-list li i {
+            color: #34D399;
+            font-size: 15px;
+        }
+
+        /* Domain & Addon Card */
+        .addon-card {
+            background: linear-gradient(145deg, #131F36, #101A2E);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .addon-card-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .addon-card-title i {
+            color: #5794FF;
+        }
+
+        .addon-card-sub {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        /* Payment Methods Grid */
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .payment-option-card {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+        }
+
+        .payment-option-card:hover {
+            border-color: rgba(87, 148, 255, 0.4);
+            background: rgba(52, 120, 246, 0.06);
+        }
+
+        .payment-option-card.selected {
+            border-color: var(--primary-light);
+            background: rgba(52, 120, 246, 0.15);
+            box-shadow: 0 0 15px rgba(52, 120, 246, 0.25);
+        }
+
+        .payment-option-card i {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 6px;
+            color: #65A1FF;
+        }
+
+        .payment-option-card span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #F8FAFC;
+            display: block;
+        }
+
+        .payment-option-card small {
+            font-size: 10px;
+            color: #94A3B8;
+        }
+
+        /* Order Summary Panel */
+        .order-summary-card {
+            background: linear-gradient(145deg, #15223C, #0F1A2D);
+            border: 1px solid rgba(87, 148, 255, 0.25);
+            border-radius: 20px;
+            padding: 28px;
+            position: sticky;
+            top: 90px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .summary-header {
+            font-size: 19px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 13px;
+            font-size: 13px;
+            color: #CBD5E1;
+        }
+
+        .summary-row span:last-child {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .summary-row.free-tag span:last-child {
+            color: #34D399;
+        }
+
+        .summary-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+            margin: 18px 0;
+        }
+
+        .summary-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 20px;
+        }
+
+        .summary-total-label {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .summary-total-amount {
+            font-size: 26px;
+            font-weight: 800;
+            color: #5794FF;
+            text-align: right;
+        }
+
+        .summary-original-price {
+            font-size: 13px;
+            color: #8190A8;
+            text-decoration: line-through;
+            margin-right: 8px;
+        }
+
+        .saving-alert {
+            background: rgba(52, 211, 153, 0.12);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: #6EE7B7;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .btn-continue-checkout {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #3478F6, #8057FF);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 15px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.3s;
+            box-shadow: 0 10px 30px rgba(52, 120, 246, 0.3);
+        }
+
+        .btn-continue-checkout:hover {
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(52, 120, 246, 0.45);
+        }
+
+        .guarantee-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .guarantee-note i {
+            color: #34D399;
+        }
+
+        .customer-info-card {
+            background: linear-gradient(145deg, #131F36, #101A2E);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            color: #DCE5F3;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .form-control-custom {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 10px 14px;
+            font-size: 13px;
+            width: 100%;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .form-control-custom:focus {
+            border-color: #5794FF;
+            box-shadow: 0 0 15px rgba(52, 120, 246, 0.2);
+        }
+
+        /* Coupon section */
+        .coupon-box {
+            margin-bottom: 18px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .coupon-toggle-btn {
+            background: none;
+            border: none;
+            color: #5794FF;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .coupon-toggle-btn:hover {
+            color: #8057FF;
+        }
+
+        .coupon-input-group {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .coupon-input-group.active {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP PROMO STRIP -->
+    <div class="checkout-header-bar">
+        ✨ Promo Spesial Hosting CloudNova telah diterapkan. Selesaikan pesanan Anda hari ini!
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top custom-navbar" style="top: 35px;">
+        <div class="container">
+            <a class="navbar-brand brand-logo" href="index.html">
+                <span class="brand-icon">
+                    <i class="bi bi-cloud-fill"></i>
+                </span> CloudNova
+                <span class="brand-highlight">.</span>
+            </a>
+
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <a href="index.html#pricing" class="btn btn-outline-light-custom btn-sm">
+                    <i class="bi bi-arrow-left"></i> Ganti Paket
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CHECKOUT CONTENT -->
+    <div class="checkout-page">
+        <div class="container" style="max-width: 1140px;">
+
+            <div class="row g-4">
+
+                <!-- LEFT COLUMN: CART & OPTIONS -->
+                <div class="col-lg-7">
+
+                    <h2 class="mb-4 font-weight-bold" style="font-size: 26px; color: #fff;">
+                        Keranjang Anda
+                    </h2>
+
+                    <!-- 1. MAIN HOSTING PACKAGE CARD -->
+                    <div class="cart-card">
+
+                        <div class="cart-card-header">
+                            <div class="cart-item-title">
+                                <div class="cart-item-icon">
+                                    <i class="bi bi-hdd-network-fill"></i>
+                                </div>
+                                <div>
+                                    <h4 id="displayPlanTitle">Paket Business</h4>
+                                    <span>Cloud Hosting &amp; Pembuatan Website</span>
+                                </div>
+                            </div>
+                            <span class="badge bg-primary" id="planBadge">Paling Populer</span>
+                        </div>
+
+                        <!-- DURATION & RATE ROW -->
+                        <div class="duration-selector-row">
+                            <div class="duration-select-box">
+                                <label for="durationSelect" class="form-label mb-0" style="color: #94A3B8;">Durasi:</label>
+                                <select id="durationSelect" class="duration-select">
+                                    <option value="1">1 Bulan</option>
+                                    <option value="12" selected>12 Bulan (1 Tahun)</option>
+                                    <option value="24">24 Bulan (2 Tahun)</option>
+                                    <option value="48">48 Bulan (4 Tahun)</option>
+                                </select>
+                            </div>
+
+                            <div class="cart-price-tag">
+                                <div>
+                                    <span class="discount-pill" id="discountPill">Hemat 20%</span>
+                                    <span class="cart-price-rate" id="displayMonthlyRate">Rp39.200</span>
+                                    <span style="font-size: 13px; color: #94A3B8;">/bln</span>
+                                </div>
+                                <div class="cart-price-sub" id="displayNormalRate">
+                                    Harga normal Rp49.000/bln
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PROMO BANNER -->
+                        <div class="promo-banner-strip">
+                            <i class="bi bi-stars"></i>
+                            <span id="promoBannerText">Harga promo terbaik tahun ini. Amankan harga spesial sebelum periode berakhir!</span>
+                        </div>
+
+                        <!-- PERKS LIST -->
+                        <ul class="perks-list">
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                Termasuk Domain Gratis (.com/.id) untuk durasi 1 tahun ke atas
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                Gratis Sertifikat SSL Unlimited selamanya
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                Backup Berkala &amp; Control Panel Responsif
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle-fill"></i>
+                                Bantuan Teknis Prioritas via WhatsApp &amp; Tiket
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <!-- 2. DOMAIN ADDON CARD -->
+                    <div class="addon-card">
+                        <div class="addon-card-title">
+                            <i class="bi bi-globe"></i>
+                            Tentukan Nama Domain Anda
+                        </div>
+                        <p class="addon-card-sub">
+                            Pilih ekstensi .com, .id, .net, atau .org. Gratis untuk paket langganan 12 bulan ke atas!
+                        </p>
+
+                        <div class="input-group">
+                            <input type="text" id="cartDomainInput" class="form-control-custom" placeholder="contoh: tokosaya.com" style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                            <button class="btn btn-primary-custom" id="applyDomainBtn" style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                                Pasang Domain
+                            </button>
+                        </div>
+                        <div id="domainStatusText" class="mt-2" style="font-size: 12px; color: #34D399; display: none;"></div>
+                    </div>
+
+                    <!-- 3. PAYMENT METHODS SELECTION -->
+                    <div class="addon-card">
+                        <div class="addon-card-title">
+                            <i class="bi bi-credit-card-2-front-fill"></i>
+                            Pilih Metode Pembayaran
+                        </div>
+                        <p class="addon-card-sub">
+                            Pilih cara pembayaran yang paling nyaman untuk Anda. Konfirmasi otomatis &amp; cepat.
+                        </p>
+
+                        <div class="payment-methods-grid">
+                            <div class="payment-option-card selected" data-method="QRIS Instan (GoPay, OVO, Dana, ShopeePay)">
+                                <i class="bi bi-qr-code-scan"></i>
+                                <span>QRIS Instan</span>
+                                <small>E-Wallet &amp; Bank</small>
+                            </div>
+                            <div class="payment-option-card" data-method="BCA Virtual Account">
+                                <i class="bi bi-bank"></i>
+                                <span>BCA VA</span>
+                                <small>Otomatis 24 Jam</small>
+                            </div>
+                            <div class="payment-option-card" data-method="Mandiri Virtual Account">
+                                <i class="bi bi-building"></i>
+                                <span>Mandiri VA</span>
+                                <small>Otomatis 24 Jam</small>
+                            </div>
+                            <div class="payment-option-card" data-method="BRI / BNI Virtual Account">
+                                <i class="bi bi-wallet2"></i>
+                                <span>BRI / BNI</span>
+                                <small>Virtual Account</small>
+                            </div>
+                            <div class="payment-option-card" data-method="Transfer Bank Manual">
+                                <i class="bi bi-cash-stack"></i>
+                                <span>Transfer Manual</span>
+                                <small>Konfirmasi WA</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. CUSTOMER DATA -->
+                    <div class="customer-info-card">
+                        <div class="addon-card-title mb-3">
+                            <i class="bi bi-person-lines-fill"></i>
+                            Informasi Kontak Pemesan
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Nama Lengkap</label>
+                                <input type="text" id="custName" class="form-control-custom" placeholder="Nama Anda">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Nomor WhatsApp Aktif</label>
+                                <input type="tel" id="custPhone" class="form-control-custom" placeholder="0812xxxxxxx">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Alamat Email (Untuk Pengiriman Akun cPanel)</label>
+                                <input type="email" id="custEmail" class="form-control-custom" placeholder="nama@email.com">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT COLUMN: ORDER SUMMARY -->
+                <div class="col-lg-5">
+
+                    <div class="order-summary-card">
+
+                        <h3 class="summary-header">Ringkasan Pesanan</h3>
+
+                        <!-- COUPON CODE ROW -->
+                        <div class="coupon-box">
+                            <button type="button" class="coupon-toggle-btn" id="couponToggleBtn">
+                                <i class="bi bi-ticket-perforated"></i> Punya Kode Kupon Promo?
+                            </button>
+                            <div class="coupon-input-group" id="couponInputGroup">
+                                <input type="text" id="couponCodeInput" class="form-control-custom" placeholder="Ketik kupon (contoh: SEMESTER7)" style="text-transform: uppercase;">
+                                <button class="btn btn-outline-light-custom btn-sm" id="applyCouponBtn" type="button">Terapkan</button>
+                            </div>
+                            <div id="couponMessage" style="font-size: 11px; margin-top: 6px; display: none;"></div>
+                        </div>
+
+                        <div class="summary-row">
+                            <span id="sumPlanName">Paket Business</span>
+                            <span id="sumOriginalTotal">Rp588.000</span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Durasi Sewa</span>
+                            <span id="sumDuration">12 Bulan</span>
+                        </div>
+
+                        <div class="summary-row">
+                            <span>Metode Pembayaran</span>
+                            <span id="sumPaymentMethod" style="color: #65A1FF;">QRIS Instan</span>
+                        </div>
+
+                        <div class="summary-row free-tag" id="couponRow" style="display: none;">
+                            <span id="couponRowLabel">Diskon Kupon Promo</span>
+                            <span id="sumCouponDiscount" style="color: #34D399;">-Rp0</span>
+                        </div>
+
+                        <div class="summary-row free-tag">
+                            <span>Sertifikat SSL Premium</span>
+                            <span>Rp0 (Gratis)</span>
+                        </div>
+
+                        <div class="summary-row free-tag">
+                            <span>Backup Otomatis</span>
+                            <span>Rp0 (Gratis)</span>
+                        </div>
+
+                        <div class="summary-row free-tag" id="domainSummaryRow">
+                            <span>Registrasi Domain (1 Tahun)</span>
+                            <span id="sumDomainPrice">Rp0 (Gratis Promo)</span>
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <div class="summary-row">
+                            <span>Pajak PPN (11%)</span>
+                            <span id="sumTax">Rp51.744</span>
+                        </div>
+
+                        <div class="summary-total-row">
+                            <span class="summary-total-label">Total Pembayaran</span>
+                            <div>
+                                <span class="summary-original-price" id="sumStrikePrice">Rp652.680</span>
+                                <span class="summary-total-amount" id="sumGrandTotal">Rp522.144</span>
+                            </div>
+                        </div>
+
+                        <div class="saving-alert" id="savingAlert">
+                            <i class="bi bi-tag-fill"></i>
+                            <span id="savingText">Anda hemat Rp130.536 hari ini!</span>
+                        </div>
+
+                        <!-- CTA BUTTON -->
+                        <button class="btn-continue-checkout" id="submitOrderBtn">
+                            Lanjutkan ke WhatsApp <i class="bi bi-arrow-right"></i>
+                        </button>
+
+                        <div class="guarantee-note">
+                            <i class="bi bi-shield-check"></i>
+                            Garansi 30 Hari Uang Kembali &bull; Layanan Terpercaya
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer-section">
+        <div class="container text-center py-4 border-top" style="border-color: var(--border) !important;">
+            <p class="text-muted mb-0">&copy; 2026 CloudNova Hosting. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // URL PARAMETERS (e.g. ?plan=starter, ?plan=business, ?plan=pro)
+            const urlParams = new URLSearchParams(window.location.search);
+            const planParam = (urlParams.get("plan") || "business").toLowerCase();
+            const domainParam = urlParams.get("domain") || "";
+
+            // DATA SPECIFICATION FOR PLANS
+            const plansData = {
+                starter: {
+                    title: "Paket Starter",
+                    badge: "Pilihan Ekonomis",
+                    baseMonthly: 25000,
+                    discounts: { 1: 0, 12: 0.20, 24: 0.30, 48: 0.40 }
+                },
+                business: {
+                    title: "Paket Business",
+                    badge: "Paling Populer",
+                    baseMonthly: 49000,
+                    discounts: { 1: 0, 12: 0.20, 24: 0.35, 48: 0.45 }
+                },
+                professional: {
+                    title: "Paket Professional",
+                    badge: "Performa Tinggi",
+                    baseMonthly: 89000,
+                    discounts: { 1: 0, 12: 0.20, 24: 0.35, 48: 0.50 }
+                }
+            };
+
+            const currentPlan = plansData[planParam] || plansData.business;
+
+            // COUPON DISCOUNTS
+            let appliedCouponDiscount = 0;
+            let currentCouponCode = "";
+            const validCoupons = {
+                "SEMESTER7": 0.15, // Diskon 15%
+                "MABA2026": 0.10,  // Diskon 10%
+                "CLOUDFIRST": 0.20 // Diskon 20%
+            };
+
+            // SELECTED PAYMENT METHOD
+            let selectedPaymentMethod = "QRIS Instan (GoPay, OVO, Dana, ShopeePay)";
+
+            // DOM ELEMENTS
+            const displayPlanTitle = document.getElementById("displayPlanTitle");
+            const planBadge = document.getElementById("planBadge");
+            const durationSelect = document.getElementById("durationSelect");
+            const discountPill = document.getElementById("discountPill");
+            const displayMonthlyRate = document.getElementById("displayMonthlyRate");
+            const displayNormalRate = document.getElementById("displayNormalRate");
+            const sumPlanName = document.getElementById("sumPlanName");
+            const sumDuration = document.getElementById("sumDuration");
+            const sumOriginalTotal = document.getElementById("sumOriginalTotal");
+            const sumTax = document.getElementById("sumTax");
+            const sumStrikePrice = document.getElementById("sumStrikePrice");
+            const sumGrandTotal = document.getElementById("sumGrandTotal");
+            const savingText = document.getElementById("savingText");
+            const cartDomainInput = document.getElementById("cartDomainInput");
+            const applyDomainBtn = document.getElementById("applyDomainBtn");
+            const domainStatusText = document.getElementById("domainStatusText");
+            const submitOrderBtn = document.getElementById("submitOrderBtn");
+            const sumPaymentMethod = document.getElementById("sumPaymentMethod");
+
+            // COUPON DOM ELEMENTS
+            const couponToggleBtn = document.getElementById("couponToggleBtn");
+            const couponInputGroup = document.getElementById("couponInputGroup");
+            const couponCodeInput = document.getElementById("couponCodeInput");
+            const applyCouponBtn = document.getElementById("applyCouponBtn");
+            const couponMessage = document.getElementById("couponMessage");
+            const couponRow = document.getElementById("couponRow");
+            const couponRowLabel = document.getElementById("couponRowLabel");
+            const sumCouponDiscount = document.getElementById("sumCouponDiscount");
+
+            displayPlanTitle.textContent = currentPlan.title;
+            planBadge.textContent = currentPlan.badge;
+            sumPlanName.textContent = currentPlan.title;
+
+            if (domainParam) {
+                cartDomainInput.value = domainParam;
+                domainStatusText.style.display = "block";
+                domainStatusText.textContent = `✓ Domain ${domainParam} siap dipasangkan.`;
+            }
+
+            function formatRupiah(num) {
+                return "Rp" + Math.round(num).toLocaleString("id-ID");
+            }
+
+            function recalculate() {
+                const months = parseInt(durationSelect.value, 10);
+                const discountRate = currentPlan.discounts[months] || 0;
+                const baseMonthly = currentPlan.baseMonthly;
+
+                const discountedMonthly = baseMonthly * (1 - discountRate);
+                const normalTotal = baseMonthly * months;
+                let subTotal = discountedMonthly * months;
+
+                // Hitung kupon jika ada
+                let couponDeduction = 0;
+                if (appliedCouponDiscount > 0) {
+                    couponDeduction = subTotal * appliedCouponDiscount;
+                    subTotal = subTotal - couponDeduction;
+                    couponRow.style.display = "flex";
+                    couponRowLabel.textContent = `Kupon (${currentCouponCode}) -${Math.round(appliedCouponDiscount * 100)}%`;
+                    sumCouponDiscount.textContent = `-${formatRupiah(couponDeduction)}`;
+                } else {
+                    couponRow.style.display = "none";
+                }
+
+                const tax = subTotal * 0.11; // PPN 11%
+                const grandTotal = subTotal + tax;
+                const normalGrandTotal = normalTotal + (normalTotal * 0.11);
+                const savings = normalGrandTotal - grandTotal;
+
+                // Update UI
+                if (discountRate > 0) {
+                    discountPill.style.display = "inline-block";
+                    discountPill.textContent = `Hemat ${Math.round(discountRate * 100)}%`;
+                    displayNormalRate.textContent = `Harga normal ${formatRupiah(baseMonthly)}/bln`;
+                } else {
+                    discountPill.style.display = "none";
+                    displayNormalRate.textContent = `Harga normal tanpa diskon`;
+                }
+
+                displayMonthlyRate.textContent = formatRupiah(discountedMonthly);
+                sumDuration.textContent = `${months} Bulan`;
+                sumOriginalTotal.textContent = formatRupiah(discountedMonthly * months);
+                sumTax.textContent = formatRupiah(tax);
+
+                if (savings > 0) {
+                    sumStrikePrice.style.display = "inline";
+                    sumStrikePrice.textContent = formatRupiah(normalGrandTotal);
+                    document.getElementById("savingAlert").style.display = "flex";
+                    savingText.textContent = `Anda hemat ${formatRupiah(savings)} hari ini!`;
+                } else {
+                    sumStrikePrice.style.display = "none";
+                    document.getElementById("savingAlert").style.display = "none";
+                }
+
+                sumGrandTotal.textContent = formatRupiah(grandTotal);
+
+                // Domain promo check (free if >= 12 months)
+                const sumDomainPrice = document.getElementById("sumDomainPrice");
+                if (months >= 12) {
+                    sumDomainPrice.textContent = "Rp0 (Gratis Promo)";
+                } else {
+                    sumDomainPrice.textContent = "Rp150.000/thn";
+                }
+            }
+
+            durationSelect.addEventListener("change", recalculate);
+            recalculate();
+
+            // COUPON EVENT LISTENERS
+            couponToggleBtn.addEventListener("click", function() {
+                couponInputGroup.classList.toggle("active");
+                if (couponInputGroup.classList.contains("active")) {
+                    couponCodeInput.focus();
+                }
+            });
+
+            applyCouponBtn.addEventListener("click", function() {
+                const code = couponCodeInput.value.trim().toUpperCase();
+                if (!code) {
+                    couponMessage.style.display = "block";
+                    couponMessage.style.color = "#F87171";
+                    couponMessage.textContent = "Silakan masukkan kode kupon.";
+                    return;
+                }
+
+                if (validCoupons[code]) {
+                    appliedCouponDiscount = validCoupons[code];
+                    currentCouponCode = code;
+                    couponMessage.style.display = "block";
+                    couponMessage.style.color = "#34D399";
+                    couponMessage.textContent = `✓ Kupon ${code} berhasil! Diskon ${Math.round(appliedCouponDiscount * 100)}% diterapkan.`;
+                    recalculate();
+                } else {
+                    couponMessage.style.display = "block";
+                    couponMessage.style.color = "#F87171";
+                    couponMessage.textContent = "Kupon tidak valid atau telah kedaluwarsa.";
+                }
+            });
+
+            // PAYMENT METHODS SELECTION LOGIC
+            const paymentOptionCards = document.querySelectorAll(".payment-option-card");
+            paymentOptionCards.forEach(function(card) {
+                card.addEventListener("click", function() {
+                    paymentOptionCards.forEach(c => c.classList.remove("selected"));
+                    card.classList.add("selected");
+                    selectedPaymentMethod = card.dataset.method;
+                    sumPaymentMethod.textContent = card.querySelector("span").textContent;
+                });
+            });
+
+            applyDomainBtn.addEventListener("click", function () {
+                const domain = cartDomainInput.value.trim();
+                if (!domain) {
+                    alert("Silakan ketikkan nama domain terlebih dahulu.");
+                    return;
+                }
+                domainStatusText.style.display = "block";
+                domainStatusText.textContent = `✓ Domain ${domain} berhasil dikaitkan ke pesanan!`;
+            });
+
+            // WHATSAPP SUBMISSION GENERATOR
+            submitOrderBtn.addEventListener("click", function () {
+                const months = durationSelect.value;
+                const domain = cartDomainInput.value.trim() || "- (Belum ditentukan)";
+                const name = document.getElementById("custName").value.trim() || "Pelanggan";
+                const phone = document.getElementById("custPhone").value.trim() || "-";
+                const email = document.getElementById("custEmail").value.trim() || "-";
+                const grandTotal = sumGrandTotal.textContent;
+
+                let couponNote = currentCouponCode ? `\n*Kupon Promo:* ${currentCouponCode} (-${Math.round(appliedCouponDiscount * 100)}%)` : "";
+
+                const message =
+                    `*PESANAN BARU CLOUDNOVA HOSTING*\n` +
+                    `---------------------------------------\n` +
+                    `*Paket:* ${currentPlan.title}\n` +
+                    `*Durasi:* ${months} Bulan\n` +
+                    `*Nama Domain:* ${domain}\n` +
+                    `*Metode Bayar:* ${selectedPaymentMethod}${couponNote}\n` +
+                    `*Total Tagihan:* ${grandTotal} (Termasuk PPN)\n` +
+                    `---------------------------------------\n` +
+                    `*Data Pemesan:*\n` +
+                    `- Nama: ${name}\n` +
+                    `- No WA: ${phone}\n` +
+                    `- Email: ${email}\n\n` +
+                    `Halo tim CloudNova, saya ingin menyelesaikan pemesanan ini dengan metode ${selectedPaymentMethod}. Mohon panduan pembayarannya. Terima kasih!`;
+
+                const waURL = `https://wa.me/628996217895?text=${encodeURIComponent(message)}`;
+                window.open(waURL, "_blank");
+            });
+        });
+    </script>
+
+</body>
+
+</html>

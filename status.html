@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server &amp; Network Status — CloudNova Hosting</title>
+    <meta name="description" content="Pantau ketersediaan, status sistem, uptime, dan latensi server CloudNova Hosting secara realtime.">
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+
+    <style>
+        .status-page {
+            padding-top: 130px;
+            padding-bottom: 90px;
+            background: var(--bg-main);
+            min-height: 100vh;
+        }
+
+        .status-banner-card {
+            background: linear-gradient(145deg, #131F36, #101A2E);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-radius: 20px;
+            padding: 35px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(52, 211, 153, 0.08);
+        }
+
+        .status-overall-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .status-pulse-dot {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: rgba(52, 211, 153, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .status-pulse-dot::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid #34D399;
+            animation: pulse-ring 2s infinite ease-out;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 1; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+
+        .status-pulse-dot i {
+            color: #34D399;
+            font-size: 26px;
+        }
+
+        .status-overall-text h3 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .status-overall-text p {
+            font-size: 13px;
+            color: #94A3B8;
+            margin: 0;
+        }
+
+        .uptime-badge-group {
+            text-align: right;
+        }
+
+        .uptime-badge-group strong {
+            display: block;
+            font-size: 30px;
+            font-weight: 800;
+            color: #34D399;
+        }
+
+        .uptime-badge-group span {
+            font-size: 12px;
+            color: #8190A8;
+        }
+
+        .nodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 45px;
+        }
+
+        .node-card {
+            background: linear-gradient(145deg, #131F36, #101A2E);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 22px;
+            transition: 0.3s ease;
+        }
+
+        .node-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(87, 148, 255, 0.35);
+        }
+
+        .node-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .node-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .node-state-badge {
+            background: rgba(52, 211, 153, 0.12);
+            color: #34D399;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 50px;
+            border: 1px solid rgba(52, 211, 153, 0.25);
+        }
+
+        .node-metric {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #94A3B8;
+            margin-bottom: 8px;
+        }
+
+        .node-metric strong {
+            color: #ffffff;
+        }
+
+        .node-history-bar {
+            display: flex;
+            gap: 4px;
+            height: 24px;
+            margin-top: 14px;
+            align-items: flex-end;
+        }
+
+        .history-slot {
+            flex: 1;
+            background: #34D399;
+            height: 100%;
+            border-radius: 2px;
+            opacity: 0.85;
+            transition: 0.2s;
+        }
+
+        .history-slot:hover {
+            opacity: 1;
+            transform: scaleY(1.1);
+        }
+
+        .component-list-table {
+            background: linear-gradient(145deg, #131F36, #101A2E);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .component-list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .component-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .component-info h5 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 3px;
+        }
+
+        .component-info p {
+            font-size: 11px;
+            color: #8190A8;
+            margin: 0;
+        }
+
+        .component-status-tag {
+            font-size: 12px;
+            font-weight: 700;
+            color: #34D399;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .component-status-tag span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #34D399;
+            box-shadow: 0 0 8px #34D399;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top custom-navbar">
+        <div class="container">
+            <a class="navbar-brand brand-logo" href="index.html">
+                <span class="brand-icon">
+                    <i class="bi bi-cloud-fill"></i>
+                </span> CloudNova
+                <span class="brand-highlight">.</span>
+            </a>
+
+            <div class="ms-auto d-flex align-items-center gap-3">
+                <a href="index.html" class="btn btn-outline-light-custom btn-sm">
+                    <i class="bi bi-arrow-left"></i> Kembali ke Beranda
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="status-page">
+        <div class="container" style="max-width: 1040px;">
+
+            <!-- OVERALL BANNER -->
+            <div class="status-banner-card">
+                <div class="status-overall-info">
+                    <div class="status-pulse-dot">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <div class="status-overall-text">
+                        <h3>Semua Sistem Beroperasi Normal</h3>
+                        <p>Pemantauan real-time infrastruktur CloudNova Hosting (Diperbarui tiap 60 detik)</p>
+                    </div>
+                </div>
+
+                <div class="uptime-badge-group">
+                    <strong>99.98%</strong>
+                    <span>Rata-rata Uptime 90 Hari Terakhir</span>
+                </div>
+            </div>
+
+            <!-- SERVER NODES METRICS -->
+            <h4 class="mb-3 text-white font-weight-bold" style="font-size: 20px;">
+                <i class="bi bi-hdd-rack-fill text-primary me-2"></i>Status Server &amp; Datacenter Nodes
+            </h4>
+
+            <div class="nodes-grid">
+
+                <!-- NODE 1: JAKARTA -->
+                <div class="node-card">
+                    <div class="node-card-header">
+                        <div class="node-name">
+                            🇮🇩 Node ID-01 (Cyber 2 Jakarta)
+                        </div>
+                        <span class="node-state-badge">Normal</span>
+                    </div>
+                    <div class="node-metric">
+                        <span>Latensi Rata-rata</span>
+                        <strong class="text-success">4 ms</strong>
+                    </div>
+                    <div class="node-metric">
+                        <span>CPU Usage</span>
+                        <strong>18%</strong>
+                    </div>
+                    <div class="node-metric">
+                        <span>RAM Usage</span>
+                        <strong>32% (Optimal)</strong>
+                    </div>
+                    <div class="node-history-bar" title="Uptime 30 hari terakhir 100%">
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                    </div>
+                </div>
+
+                <!-- NODE 2: SINGAPORE -->
+                <div class="node-card">
+                    <div class="node-card-header">
+                        <div class="node-name">
+                            🇸🇬 Node SG-01 (Equinix Singapore)
+                        </div>
+                        <span class="node-state-badge">Normal</span>
+                    </div>
+                    <div class="node-metric">
+                        <span>Latensi Rata-rata</span>
+                        <strong class="text-success">19 ms</strong>
+                    </div>
+                    <div class="node-metric">
+                        <span>CPU Usage</span>
+                        <strong>22%</strong>
+                    </div>
+                    <div class="node-metric">
+                        <span>RAM Usage</span>
+                        <strong>41% (Optimal)</strong>
+                    </div>
+                    <div class="node-history-bar" title="Uptime 30 hari terakhir 99.9%">
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                    </div>
+                </div>
+
+                <!-- NODE 3: BACKUP CLUSTER -->
+                <div class="node-card">
+                    <div class="node-card-header">
+                        <div class="node-name">
+                            🛡️ Storage &amp; Backup Vault
+                        </div>
+                        <span class="node-state-badge">Normal</span>
+                    </div>
+                    <div class="node-metric">
+                        <span>Replikasi Data</span>
+                        <strong class="text-success">Real-time Synced</strong>
+                    </div>
+                    <div class="node-metric">
+                        <span>Snapshot Status</span>
+                        <strong>Daily Completed</strong>
+                    </div>
+                    <div class="node-metric">
+                        <span>Integrity Check</span>
+                        <strong class="text-success">100% Passed</strong>
+                    </div>
+                    <div class="node-history-bar" title="Uptime 30 hari terakhir 100%">
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                        <div class="history-slot"></div><div class="history-slot"></div><div class="history-slot"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- COMPONENT BREAKDOWN TABLE -->
+            <h4 class="mb-3 text-white font-weight-bold" style="font-size: 20px;">
+                <i class="bi bi-cpu-fill text-info me-2"></i>Komponen Layanan Hosting
+            </h4>
+
+            <div class="component-list-table">
+
+                <div class="component-list-item">
+                    <div class="component-info">
+                        <h5>LiteSpeed Web Server Cluster</h5>
+                        <p>Penanganan request HTTP/HTTPS dan cache akselerasi website</p>
+                    </div>
+                    <div class="component-status-tag">
+                        <span></span> Operational
+                    </div>
+                </div>
+
+                <div class="component-list-item">
+                    <div class="component-info">
+                        <h5>MySQL &amp; MariaDB Database Service</h5>
+                        <p>Query engine database untuk CMS (WordPress, Laravel, eCommerce)</p>
+                    </div>
+                    <div class="component-status-tag">
+                        <span></span> Operational
+                    </div>
+                </div>
+
+                <div class="component-list-item">
+                    <div class="component-info">
+                        <h5>cPanel &amp; Cloud Control Panel</h5>
+                        <p>Interface pengelolaan akun, file manager, dan DNS management</p>
+                    </div>
+                    <div class="component-status-tag">
+                        <span></span> Operational
+                    </div>
+                </div>
+
+                <div class="component-list-item">
+                    <div class="component-info">
+                        <h5>Mail Server (SMTP / IMAP / Webmail)</h5>
+                        <p>Pengiriman dan penerimaan email bisnis pelanggan</p>
+                    </div>
+                    <div class="component-status-tag">
+                        <span></span> Operational
+                    </div>
+                </div>
+
+                <div class="component-list-item">
+                    <div class="component-info">
+                        <h5>Automated SSL &amp; AutoSSL Provider</h5>
+                        <p>Penerbitan dan pembaruan sertifikat enkripsi TLS/HTTPS</p>
+                    </div>
+                    <div class="component-status-tag">
+                        <span></span> Operational
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer-section">
+        <div class="container text-center py-4 border-top" style="border-color: var(--border) !important;">
+            <p class="text-muted mb-0">&copy; 2026 CloudNova Hosting. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

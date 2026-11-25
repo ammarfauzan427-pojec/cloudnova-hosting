@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --bg-main: #080D1B;
+  --bg-secondary: #0D1426;
+  --bg-card: #111B30;
+  --primary: #3478F6;
+  --primary-light: #5794FF;
+  --purple: #8057FF;
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-floating {
+  animation: float 4s ease-in-out infinite;
+}
